@@ -3,7 +3,7 @@ License ="""LICENSE:
 
 BSD 3-Clause License
 
-Copyright (c) 2024, Emilio Anastasio Müller
+Copyright (c) 2024, Emilio Anastasio MÃ¼ller
 
 Redistribution and use in source and binary forms, with or
 without modification, are permitted provided that the
@@ -56,7 +56,7 @@ from sqlite3 import Error
 pymsgbox.alert(License, "License Agreement")
 
 if not os.path.exists('inventering.db'):
-    query = "CREATE TABLE IF NOT EXISTS LAPTOPS (MODEL TEXT, RAM TEXT, CPU TEXT, MISC TEXT, NUMMER PRIMARY KEY);"
+    query = "CREATE TABLE IF NOT EXISTS LAPTOPS (MODEL TEXT, RAM TEXT, CPU TEXT, MISC TEXT, NUMBER PRIMARY KEY);"
     try:
         connection = sqlite3.connect("inventering.db")
         cursor = connection.cursor()
@@ -64,8 +64,9 @@ if not os.path.exists('inventering.db'):
         connection.commit()
         connection.close()
     except Error as err:
-        pymsgbox.alert(f"Kunde inte skapa databasfilen.\n\nDatabasens felmeddelande:\n{err}", "Exception Error")
+        pymsgbox.alert(f"Couldn't create database.\n\nError message from database:\n{err}", "Exception Error")
         connection.close()
+        exit()
 class Root(Tk):
 
     def __init__(self):
@@ -98,7 +99,7 @@ class Root(Tk):
         self.CPU.grid(row=0, column=2)
         self.misc = ttk.Button(self, style = "ping.TButton", text="Misc")
         self.misc.grid(row=0, column=3)
-        self.nummer = ttk.Button(self, style="ping.TButton", text="Nummer", command = self.editsq)
+        self.nummer = ttk.Button(self, style="ping.TButton", text="Number", command = self.editsq)
         self.nummer.grid(row=0, column=4)
 
         # Entry fields, meant to correspond to sqlite3 database query values.
@@ -277,15 +278,15 @@ class Root(Tk):
 
         # self.laptop = ttk.Button(self, style = "ping.TButton", text="Laptop", command=self.laptopbool)
         # Buttons to search, add, and delete entry from database
-        self.addin = ttk.Button(self, style = "green.TButton", text="Lägg in", command=self.addtosql)
+        self.addin = ttk.Button(self, style = "green.TButton", text="Add", command=self.addtosql)
         self.addin.grid(row=18, column=0)
         self.previous = ttk.Button(self, style = "green.TButton", text="<--", command=self.previousp)
         self.previous.grid(row=18, column=1)
-        self.search = ttk.Button(self, style = "green.TButton", text="Sök", command=self.searchsq)
+        self.search = ttk.Button(self, style = "green.TButton", text="Search", command=self.searchsq)
         self.search.grid(row=18, column=2)
         self.next = ttk.Button(self, style = "green.TButton", text="-->", command=self.nextp)
         self.next.grid(row=18, column=3)
-        self.tabort = ttk.Button(self, style = "red.TButton", text="Ta bort", command=self.delfromsql)
+        self.tabort = ttk.Button(self, style = "red.TButton", text="Remove", command=self.delfromsql)
         self.tabort.grid(row=18, column=4)
        
         # List of all placeholders.
@@ -325,7 +326,7 @@ class Root(Tk):
             return
         if self.value4.get() != "":
             values = []
-            colum = ["MODEL","RAM","CPU","MISC", "NUMMER"]
+            colum = ["MODEL","RAM","CPU","MISC", "NUMBER"]
             q = 0
             for sq in self.allvalues:
                 if sq.get() != "":
@@ -346,15 +347,15 @@ class Root(Tk):
                 connection.commit()
                 connection.close()
             except Error as err:
-                pymsgbox.alert(f"Kunde inte ändra värderna i databasen.\nÄr numret existerande?\n\nDatabasens felmeddelande:\n{err}", "Exception Error")
+                pymsgbox.alert(f"Couldn't change values in the database.\nCheck if the number exists and is correct.\n\nError message from the database:\n{err}", "Exception Error")
                 connection.close()
         else:
-            pymsgbox.alert("Nummer ej ifyllt. Kan ej ändra värde utan att unikt nummer anges. Unika numrets kolumner är värderna som ändras.", "Inget unikt nummer angett")
+            pymsgbox.alert("Number wasn't given. Can't change values without specifying unique number. The unique numbers columns are the values that change.", "No unique number given")
         self.searchsql()
 
     # Search SQLite3 database. 
     def searchsql(self):
-        columns = ["SELECT * FROM LAPTOPS WHERE MODEL LIKE", "RAM LIKE", "CPU LIKE", "MISC LIKE", "NUMMER = "]
+        columns = ["SELECT * FROM LAPTOPS WHERE MODEL LIKE", "RAM LIKE", "CPU LIKE", "MISC LIKE", "NUMBER = "]
         values = []
         q = 0
         for sq in self.allvalues:
@@ -395,7 +396,7 @@ class Root(Tk):
             connection.commit()
             connection.close()
         except Error as err:
-            pymsgbox.alert(f"Kunde inte lägga till värderna i databasen.\nÄr numret unikt?\n\nDatabasens felmeddelande:\n{err}", "Exception Error")
+            pymsgbox.alert(f"Couldn't add values to the database.\nIs the number unique?\n\nError message from the database:\n{err}", "Exception Error")
             connection.close()
 
     # Function to delete row from database. It takes the last value, nummer, and deletes row with it. 
@@ -407,17 +408,17 @@ class Root(Tk):
             nummer = int(values[-1])
 
         except Exception:
-            pymsgbox.alert("OBS. att numret måste vara en siffra. Programmet raderar raden som har det angivna numret, inga komma eller punkter.", "Not INT error")
+            pymsgbox.alert("Note that the number must be a whole number. The program deletes the row which has the given number, no commas or punctiations.", "Not INT error")
 
         else:
             connection = sqlite3.connect("inventering.db")
             cursor = connection.cursor()
             try:
-                cursor.execute(f"DELETE FROM LAPTOPS WHERE NUMMER IS {nummer}")
+                cursor.execute(f"DELETE FROM LAPTOPS WHERE NUMBER IS {nummer}")
                 connection.commit()
                 connection.close()
             except Error as err:
-                pymsgbox.alert(f"Kunde inte ta bort raden från databasen.\nFinns numret i databasen?\n\nDatabasens felmeddelande:\n{err}", "Exception error")
+                pymsgbox.alert(f"Couldn't delete from the database.\nDoes the number exist in the database?\n\nError message from the database:\n{err}", "Exception error")
                 connection.close()
             else:
                 self.searchsql()
@@ -425,18 +426,18 @@ class Root(Tk):
     # A toggle to change database table as well as matching labels. For future use of course, no usage atm.
     def laptopbool(self):
         if self.laptopboo:
-            self.laptop.configure(text="Värde 0")
-            self.RAM.configure(text="Värde 1")
-            self.CPU.configure(text="Värde 2")
-            self.misc.configure(text="Värde 3")
-            self.nummer.configure(text="Ändra")
+            self.laptop.configure(text="Value 0")
+            self.RAM.configure(text="Value 1")
+            self.CPU.configure(text="Value 2")
+            self.misc.configure(text="Value 3")
+            self.nummer.configure(text="Change")
             self.laptopboo = False
         else:
             self.laptop.configure(text="Laptop")
             self.RAM.configure(text="RAM")
             self.CPU.configure(text="CPU")
             self.misc.configure(text="Misc")
-            self.nummer.configure(text="Nummer")
+            self.nummer.configure(text="Number")
             self.laptopboo = True
 
 
