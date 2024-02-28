@@ -6,3 +6,5 @@ License for all in here is 3-clause-BSD license. Please, if you take the code he
 If not, you will still have my gratitude as long as you make the software side of startups cheaper. 
 
 If you appreciate this or want me to spend more time updating and adding more, please say so. Motivation for free labour is not easy to find during these hard times. 
+
+DEPENDENCIES SO FAR: pymsgbox tkinter
