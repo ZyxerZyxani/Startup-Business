@@ -1,0 +1,11 @@
+Demo images to demonstrate. Mock database created with 26 mock entries. 
+You get bild1.png if you click on search and all input boxes are empty. Also when you start the software. 
+
+bild2.png is the result of clicking on the right arrow. E.g. it goes to page two. 
+
+search.png shows an example of a search query, you can fill in all input fields and it will filter on all. search2.png is secondary example.
+
+remove1.png is example for how to remove an entry. remove2.png is after you click remove (Ta Bort).
+
+bild7.png shows error window. If anything goes wrong with the database, in this example it's trying to add a primary key (number) that already exists.
+That makes the database throw an error. Every error message has qualified guess on what the error is, however, they will also have the exact error the database returned.
