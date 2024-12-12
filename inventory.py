@@ -266,7 +266,7 @@ class Root(Tk):
             # Redo searchquery without the unique identifier
                 self.searchsql("more")
 
-    # A toggle to change database table as well as matching labels. For future use of course, no usage atm.
+    # A toggle to change database table as well as matching labels. For future use of course, no usage atm except the change function, which changes the value of choice of item with specified number.
     def laptopbool(self):
         if self.laptopboo:
             self.laptop.configure(text="Value 0")
