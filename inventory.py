@@ -139,6 +139,7 @@ class Root(Tk):
        
         # Make list of all entry values.
         self.allvalues = [self.value0, self.value1, self.value2, self.value3, self.value4]
+        self.searchsq()
 
     # Search button function. Needed to be able to reset page and also to be able to show different pages (16 results per page). 
     def searchsq(self):
@@ -208,7 +209,7 @@ class Root(Tk):
                 q += 1
         if self.value4.get() == "" or igor == "last":
             del self.values[-1]
-        query=" AND ".join(self.values) + f"LIMIT {self.page * 16}, 16"
+        query=" AND ".join(self.values) + f"ORDER BY NUMBER ASC LIMIT {self.page * 16}, 16"
 
         connection = sqlite3.connect("inventering.db")
         cursor = connection.cursor()
@@ -239,7 +240,7 @@ class Root(Tk):
         except Error as err:
             pymsgbox.alert(f"Couldn't add values to the database.\nIs the number unique?\n\nError message from the database:\n{err}", "Exception Error")
             connection.close()
-            self.searchsql("added")
+        self.searchsql("more")
 
     # Function to delete row from database. It takes the last value, nummer, and deletes row with it. 
     def delfromsql(self):
@@ -266,7 +267,7 @@ class Root(Tk):
             # Redo searchquery without the unique identifier
                 self.searchsql("more")
 
-    # A toggle to change database table as well as matching labels. For future use of course, no usage atm except the change function, which changes the value of choice of item with specified number.
+    # A toggle to change database table as well as matching labels. For future use of course, no usage atm.
     def laptopbool(self):
         if self.laptopboo:
             self.laptop.configure(text="Value 0")
