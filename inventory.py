@@ -225,7 +225,6 @@ class Root(Tk):
         for x in range(len(self.allphs))[len(valuesp):]:
             self.allphs[x].configure(style="TButton", text="")
 
-
     # Add inputs to SQL database
     def addtosql(self):
         values = []
